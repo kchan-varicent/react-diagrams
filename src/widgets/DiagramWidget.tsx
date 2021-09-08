@@ -102,6 +102,9 @@ export class DiagramWidget extends BaseWidget<DiagramProps, DiagramState> {
 		window.removeEventListener("keyup", this.onKeyUpPointer);
 		window.removeEventListener("mouseUp", this.onMouseUp);
 		window.removeEventListener("mouseMove", this.onMouseMove);
+
+		const graphElement = document.getElementById('graphElement');
+		graphElement.removeEventListener ("wheel", this.preventPageZoom);
 	}
 
 	componentWillReceiveProps(nextProps: DiagramProps) {
@@ -158,6 +161,9 @@ export class DiagramWidget extends BaseWidget<DiagramProps, DiagramState> {
 		if (process.env.NODE_ENV !== "test") {
 			window.focus();
 		}
+
+		const graphElement = document.getElementById('graphElement');
+		graphElement.addEventListener ("wheel", this.preventPageZoom, {passive: false});
 	}
 
 	/**
@@ -667,6 +673,12 @@ export class DiagramWidget extends BaseWidget<DiagramProps, DiagramState> {
 		);
 	}
 
+	preventPageZoom(event) {
+		if (event.ctrlKey) {
+			event.preventDefault();
+		  }
+	}
+
 	render() {
 		var diagramEngine = this.props.diagramEngine;
 		diagramEngine.setMaxNumberPointsPerLink(
@@ -683,6 +695,7 @@ export class DiagramWidget extends BaseWidget<DiagramProps, DiagramState> {
 						this.props.diagramEngine.setCanvas(ref);
 					}
 				}}
+				id='graphElement'
 				onWheel={(event) => {
 					if (this.props.allowCanvasZoom) {
 						event.stopPropagation();

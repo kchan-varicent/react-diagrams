@@ -62,5 +62,6 @@ export declare class DiagramWidget extends BaseWidget<DiagramProps, DiagramState
     onKeyUp(event: any): void;
     onMouseUp(event: any): void;
     drawSelectionBox(): JSX.Element;
+    preventPageZoom(event: any): void;
     render(): JSX.Element;
 }
